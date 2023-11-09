@@ -30,13 +30,13 @@ ground2 = pygame.image.load('graphics/ground2.png')
 
 ######### Display buttons #########
 Left_arrow = pygame.image.load('Buttons/Left_arrow.png')
-Left_arrow = pygame.transform.scale(Left_arrow,(40, 40))
+Left_arrow = pygame.transform.scale(Left_arrow,(80, 80))
 
 Right_arrow = pygame.image.load('Buttons/Right_arrow.png')
-Right_arrow = pygame.transform.scale(Right_arrow,(40, 40))
+Right_arrow = pygame.transform.scale(Right_arrow,(80, 80))
 
 Space_button = pygame.image.load('Buttons/space.png')
-Space_button = pygame.transform.scale(Space_button,(40, 40))
+Space_button = pygame.transform.scale(Space_button,(80, 80))
 
 list = ['graphics/player1.png', 'graphics/player2.png', 'graphics/player3.png']
 list1 = ['graphics/Fly1.png', 'graphics/Fly2.png', 'graphics/Fly1.png']
@@ -87,8 +87,8 @@ while running:
     screen.blit(player,(x , y))
 
     screen.blit(Left_arrow,(0,0))
-    screen.blit(Right_arrow,(40,0))
-    screen.blit(Space_button,(80,0))
+    screen.blit(Right_arrow,(85,0))
+    screen.blit(Space_button,(165,0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
