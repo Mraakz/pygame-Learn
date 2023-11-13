@@ -8,36 +8,47 @@ def spaced():
     global space
     global prespace
     global y
+    global sy
+    global s2y
     if not prespace:
         prespace = True
         space = True
         while y >= 120:
             y -= 2
+        sy += 30
+        s2y += 30
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('runner')
 clock = pygame.time.Clock()
 
+#sky image
 sky1 = pygame.image.load('graphics/Sky1.png').convert_alpha()
 sky1 = pygame.transform.scale(sky1,(800, 400))
 
 sky2 = pygame.image.load('graphics/Sky2.png').convert_alpha()
 sky2 = pygame.transform.scale(sky2,(800, 400))
 
+#ground image
 ground1 = pygame.image.load('graphics/ground1.png')
 ground2 = pygame.image.load('graphics/ground2.png')
 
 ######### Display buttons #########
 Left_arrow = pygame.image.load('Buttons/Left_arrow.png')
-Left_arrow = pygame.transform.scale(Left_arrow,(40, 40))
+Left_arrow = pygame.transform.scale(Left_arrow,(80, 80))
 
 Right_arrow = pygame.image.load('Buttons/Right_arrow.png')
-Right_arrow = pygame.transform.scale(Right_arrow,(40, 40))
+Right_arrow = pygame.transform.scale(Right_arrow,(80, 80))
 
 Space_button = pygame.image.load('Buttons/space.png')
-Space_button = pygame.transform.scale(Space_button,(40, 40))
+Space_button = pygame.transform.scale(Space_button,(80, 80))
 
+#Start text
+font = pygame.font.SysFont("Arial", 36)
+
+
+#player and fly list of images to scroll thru
 list = ['graphics/player1.png', 'graphics/player2.png', 'graphics/player3.png']
 list1 = ['graphics/Fly1.png', 'graphics/Fly2.png', 'graphics/Fly1.png']
 im = 0
@@ -59,9 +70,6 @@ pygame.time.set_timer(SKY_MOVEMENT, 40)
 pygame.time.set_timer(GROUND_MOVEMENT, 30)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
-
-
-# Main game loop
 running = True
 space = False
 prespace = False
@@ -90,8 +98,8 @@ while running:
     screen.blit(player,(x , y))
 
     screen.blit(Left_arrow,(0,0))
-    screen.blit(Right_arrow,(40,0))
-    screen.blit(Space_button,(80,0))
+    screen.blit(Right_arrow,(85,0))
+    screen.blit(Space_button,(165,0))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -132,9 +140,7 @@ while running:
                           
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            spaced()
-            sy += 30
-            s2y += 30
+            spaced()            
             print("Spacebar pressed - Action 1")
 
 
