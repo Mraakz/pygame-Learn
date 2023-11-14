@@ -45,7 +45,8 @@ Space_button = pygame.image.load('Buttons/space.png')
 Space_button = pygame.transform.scale(Space_button,(80, 80))
 
 #Start text
-font = pygame.font.SysFont("Arial", 36)
+font = pygame.font.SysFont("Arial", 28)
+text = font.render('Welcome To Runner', True, 'GREEN')
 
 
 #player and fly list of images to scroll thru
@@ -89,7 +90,13 @@ sy = -80
 s2x = 800
 s2y = -80
 
-while running:
+def starting():
+    screen.blit(text, (296, 183.5))
+    screen.blit(Left_arrow,(0,0))
+    screen.blit(Right_arrow,(85,0))
+    screen.blit(Space_button,(165,0))
+
+def images():
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
@@ -97,9 +104,9 @@ while running:
     screen.blit(fly,(350,50))
     screen.blit(player,(x , y))
 
-    screen.blit(Left_arrow,(0,0))
-    screen.blit(Right_arrow,(85,0))
-    screen.blit(Space_button,(165,0))
+while running:
+    images()
+    starting()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -170,6 +177,6 @@ while running:
             left = False
 
     pygame.display.update()
-
+    clock.tick(60)
 pygame.quit()
 sys.exit()
