@@ -18,7 +18,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Mraakz/Pygame-Learn">
-    <img src="graphics/player1.png" alt="Logo" width="265" height="177.5">
+    <img src="graphics/player1.png" alt="Logo" width="68" height="48">
   </a>
 
   <h3 align="center">Pygame Learn</h3>
