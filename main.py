@@ -8,36 +8,52 @@ def spaced():
     global space
     global prespace
     global y
+    global sy
+    global s2y
     if not prespace:
         prespace = True
         space = True
         while y >= 120:
             y -= 2
+        sy += 30
+        s2y += 30
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('runner')
 clock = pygame.time.Clock()
 
+#sky image
 sky1 = pygame.image.load('graphics/Sky1.png').convert_alpha()
 sky1 = pygame.transform.scale(sky1,(800, 400))
 
 sky2 = pygame.image.load('graphics/Sky2.png').convert_alpha()
 sky2 = pygame.transform.scale(sky2,(800, 400))
 
+#ground image
 ground1 = pygame.image.load('graphics/ground1.png')
 ground2 = pygame.image.load('graphics/ground2.png')
 
 ######### Display buttons #########
 Left_arrow = pygame.image.load('Buttons/Left_arrow.png')
-Left_arrow = pygame.transform.scale(Left_arrow,(80, 80))
+Left_arrow = pygame.transform.scale(Left_arrow,(60, 60))
 
 Right_arrow = pygame.image.load('Buttons/Right_arrow.png')
-Right_arrow = pygame.transform.scale(Right_arrow,(80, 80))
+Right_arrow = pygame.transform.scale(Right_arrow,(60, 60))
 
 Space_button = pygame.image.load('Buttons/space.png')
-Space_button = pygame.transform.scale(Space_button,(80, 80))
+Space_button = pygame.transform.scale(Space_button,(60, 60))
 
+#Start text
+font1 = pygame.font.SysFont("None", 60)
+font2 =pygame.font.SysFont("None", 40)
+text1 = font1.render('Welcome To Runner', True, 'Black')
+text2 = font2.render('controls for this game are:', True, 'Black')
+txt_width = text2.get_width()
+txt_height = text2.get_height()
+
+
+#player and fly list of images to scroll thru
 list = ['graphics/player1.png', 'graphics/player2.png', 'graphics/player3.png']
 list1 = ['graphics/Fly1.png', 'graphics/Fly2.png', 'graphics/Fly1.png']
 im = 0
@@ -78,7 +94,26 @@ sy = -80
 s2x = 800
 s2y = -80
 
-while running:
+#sarting variables
+txw1 = 202
+txh1 = 120
+txw2 = 200
+txh2 = 350
+law = 580
+lah = 340
+raw = 70
+rah = 0
+spw = 130
+sph = 0
+
+def starting():
+    screen.blit(text1,(txw1, txh1))
+    screen.blit(text2,(txw2, txh2))
+    screen.blit(Left_arrow,(law, lah))
+    screen.blit(Right_arrow,(raw, rah))
+    screen.blit(Space_button,(spw, sph))
+
+def images():
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
@@ -86,9 +121,9 @@ while running:
     screen.blit(fly,(350,50))
     screen.blit(player,(x , y))
 
-    screen.blit(Left_arrow,(0,0))
-    screen.blit(Right_arrow,(85,0))
-    screen.blit(Space_button,(165,0))
+while running:
+    images()
+    starting()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -120,6 +155,7 @@ while running:
             if gx <= -810:
                 gx = 800
                 print("picture ground1 has reach out of screen")
+                #print(txt_width, txt_height)
             else: 
                 if gx != 800:
                     g2x -= 10
@@ -129,9 +165,7 @@ while running:
                           
 
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            spaced()
-            sy += 30
-            s2y += 30
+            spaced()            
             print("Spacebar pressed - Action 1")
 
 
@@ -161,6 +195,6 @@ while running:
             left = False
 
     pygame.display.update()
-
+    clock.tick(60)
 pygame.quit()
 sys.exit()

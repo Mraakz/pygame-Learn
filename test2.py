@@ -94,12 +94,24 @@ sy = -80
 s2x = 800
 s2y = -80
 
+#sarting variables
+txw1 = 202
+txh1 = 120
+txw2 = 200
+txh2 = 350
+law = 580
+lah = 340
+raw = 70
+rah = 0
+spw = 130
+sph = 0
+
 def starting():
-    screen.blit(text1,(202, 120))
-    screen.blit(text2,(200, 350))
-    screen.blit(Left_arrow,(580,340))
-    screen.blit(Right_arrow,(70,0))
-    screen.blit(Space_button,(130,0))
+    screen.blit(text1,(txw1, txh1))
+    screen.blit(text2,(txw2, txh2))
+    screen.blit(Left_arrow,(law, lah))
+    screen.blit(Right_arrow,(raw, rah))
+    screen.blit(Space_button,(spw, sph))
 
 def images():
     screen.blit(sky1,(sx,sy))
