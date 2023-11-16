@@ -35,14 +35,15 @@ ground1 = pygame.image.load('graphics/ground1.png')
 ground2 = pygame.image.load('graphics/ground2.png')
 
 ######### Display buttons #########
-Left_arrow = pygame.image.load('Buttons/Left_arrow.png')
-Left_arrow = pygame.transform.scale(Left_arrow,(60, 60))
+keys = 40
+Left_arrow = pygame.image.load('Buttons/left_arrow.png')
+Left_arrow = pygame.transform.scale(Left_arrow,(keys, keys))
 
-Right_arrow = pygame.image.load('Buttons/Right_arrow.png')
-Right_arrow = pygame.transform.scale(Right_arrow,(60, 60))
+Right_arrow = pygame.image.load('Buttons/right_arrow.png')
+Right_arrow = pygame.transform.scale(Right_arrow,(keys, keys))
 
 Space_button = pygame.image.load('Buttons/space.png')
-Space_button = pygame.transform.scale(Space_button,(60, 60))
+Space_button = pygame.transform.scale(Space_button,(80, keys))
 
 #Start text
 font1 = pygame.font.SysFont("None", 60)
@@ -99,12 +100,12 @@ txw1 = 202
 txh1 = 120
 txw2 = 200
 txh2 = 350
-law = 580
-lah = 340
-raw = 70
-rah = 0
-spw = 130
-sph = 0
+law = 560
+lah = 335
+raw = 630
+rah = 335
+spw = 710
+sph = 335
 
 def starting():
     screen.blit(text1,(txw1, txh1))
