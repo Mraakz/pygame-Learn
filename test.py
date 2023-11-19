@@ -4,6 +4,34 @@ import sys
 space = False
 prespace = False
 
+def move_sky():
+    global sx
+    global s2x
+    sx-= 10
+    if sx <= -810:
+        sx = 800
+        print("picture sky1 has reach out of screen")
+    else: 
+        if sx != 800:
+            s2x -= 10
+            if s2x == -800:
+                s2x = 800
+                print("picture sky2 has reach out of screen")
+
+def move_ground():
+    global gx
+    global g2x
+    gx-= 10
+    if gx <= -810:
+        gx = 800
+        print("picture ground1 has reach out of screen")
+    else: 
+        if gx != 800:
+            g2x -= 10
+            if g2x == -800:
+                g2x = 800
+                print("picture ground2 has reach out of screen")
+
 def spaced():
     global space
     global prespace
@@ -17,6 +45,7 @@ def spaced():
             y -= 2
         sy += 30
         s2y += 30
+
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -48,10 +77,12 @@ Space_button = pygame.transform.scale(Space_button,(80, keys))
 #Start text
 font1 = pygame.font.SysFont("None", 60)
 font2 =pygame.font.SysFont("None", 40)
+font3 =pygame.font.SysFont("None", 30)
 text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
-#txt_width = text2.get_width()
-#txt_height = text2.get_height()
+text3 = font3.render('Press space to start', True, 'Black')
+txt_width = text3.get_width()
+txt_height = text3.get_height()
 
 
 #player and fly list of images to scroll thru
@@ -76,6 +107,7 @@ pygame.time.set_timer(SKY_MOVEMENT, 40)
 pygame.time.set_timer(GROUND_MOVEMENT, 30)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
+start = False
 running = True
 space = False
 prespace = False
@@ -100,6 +132,8 @@ txx1 = 202
 txy1 = 120
 txx2 = 200
 txy2 = 350
+txx3 = 304
+txy3 = 210
 lax = 560
 lay = 343
 rax = 615
@@ -110,6 +144,7 @@ spy = 343
 def starting():
     screen.blit(text1,(txx1, txy1))
     screen.blit(text2,(txx2, txy2))
+    screen.blit(text3,(txx3, txy3))
     screen.blit(Left_arrow,(lax, lay))
     screen.blit(Right_arrow,(rax, ray))
     screen.blit(Space_button,(spx, spy))
@@ -125,75 +160,62 @@ def images():
 while running:
     images()
     starting()
-
+    #print(txt_width, txt_height)
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
 
-        if event.type == PLAYER_MOVEMENT:
-            im = (im + 1) % len(list)
-            player = pygame.image.load(list[im])
 
-        if event.type == FLY_MOVEMENT:
-            fl = (fl + 1) % len(list1)
-            fly = pygame.image.load(list1[fl])
-        
-        if event.type == SKY_MOVEMENT:
-            sx-= 10
-            if sx <= -810:
-                sx = 800
-                print("picture sky1 has reach out of screen")
-            else: 
-                if sx != 800:
-                    s2x -= 10
-                    if s2x == -800:
-                        s2x = 800
-                        print("picture sky2 has reach out of screen")
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            start = True
 
-        if event.type == GROUND_MOVEMENT:
-            gx-= 10
-            if gx <= -810:
-                gx = 800
-                print("picture ground1 has reach out of screen")
-                #print(txt_width, txt_height)
-            else: 
-                if gx != 800:
-                    g2x -= 10
-                    if g2x == -800:
-                        g2x = 800
-                        print("picture ground2 has reach out of screen")
-                          
+        if start == True: 
+            if event.type == PLAYER_MOVEMENT:
+                im = (im + 1) % len(list)
+                player = pygame.image.load(list[im])
 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            spaced()            
-            print("Spacebar pressed - Action 1")
+            if event.type == FLY_MOVEMENT:
+                fl = (fl + 1) % len(list1)
+                fly = pygame.image.load(list1[fl])
+            
+            if event.type == SKY_MOVEMENT:
+                move_sky()
+
+            if event.type == GROUND_MOVEMENT:
+                move_ground()
+                                
+
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                spaced()            
+                print("Spacebar pressed - Action 1")
 
 
-        elif event.type == CUSTOM_EVEN and space:
-            while y != 220:
-                y += 2
-            sy -= 30
-            s2y -= 30 
-            print("Action 2")
-            space = False
-            prespace = space
-        
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            right = True
-            print("right button has been pressed")
-        
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            left = True
-            print("left button has been pressed")
+            elif event.type == CUSTOM_EVEN and space:
+                while y != 220:
+                    y += 2
+                sy -= 30
+                s2y -= 30 
+                print("Action 2")
+                space = False
+                prespace = space
+            
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                right = True
+                print("right button has been pressed")
+            
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                left = True
+                print("left button has been pressed")
 
-        while right:
-            x+=20
-            right = False
+            while right:
+                x+=20
+                right = False
 
-        while left:
-            x-=20
-            left = False
+            while left:
+                x-=20
+                left = False
 
     pygame.display.update()
     clock.tick(60)
