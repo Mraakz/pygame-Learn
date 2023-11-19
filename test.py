@@ -35,18 +35,23 @@ ground1 = pygame.image.load('graphics/ground1.png')
 ground2 = pygame.image.load('graphics/ground2.png')
 
 ######### Display buttons #########
-Left_arrow = pygame.image.load('Buttons/Left_arrow.png')
-Left_arrow = pygame.transform.scale(Left_arrow,(80, 80))
+keys = 40
+Left_arrow = pygame.image.load('Buttons/left_arrow.png')
+Left_arrow = pygame.transform.scale(Left_arrow,(keys, keys))
 
-Right_arrow = pygame.image.load('Buttons/Right_arrow.png')
-Right_arrow = pygame.transform.scale(Right_arrow,(80, 80))
+Right_arrow = pygame.image.load('Buttons/right_arrow.png')
+Right_arrow = pygame.transform.scale(Right_arrow,(keys, keys))
 
 Space_button = pygame.image.load('Buttons/space.png')
-Space_button = pygame.transform.scale(Space_button,(80, 80))
+Space_button = pygame.transform.scale(Space_button,(80, keys))
 
 #Start text
-font = pygame.font.SysFont("Arial", 28)
-text = font.render('Welcome To Runner', True, 'GREEN')
+font1 = pygame.font.SysFont("None", 60)
+font2 =pygame.font.SysFont("None", 40)
+text1 = font1.render('Welcome To Runner', True, 'Black')
+text2 = font2.render('controls for this game are:', True, 'Black')
+#txt_width = text2.get_width()
+#txt_height = text2.get_height()
 
 
 #player and fly list of images to scroll thru
@@ -90,11 +95,24 @@ sy = -80
 s2x = 800
 s2y = -80
 
+#sarting variables
+txx1 = 202
+txy1 = 120
+txx2 = 200
+txy2 = 350
+lax = 560
+lay = 343
+rax = 615
+ray = 343
+spx = 670
+spy = 343
+
 def starting():
-    screen.blit(text, (296, 183.5))
-    screen.blit(Left_arrow,(0,0))
-    screen.blit(Right_arrow,(85,0))
-    screen.blit(Space_button,(165,0))
+    screen.blit(text1,(txx1, txy1))
+    screen.blit(text2,(txx2, txy2))
+    screen.blit(Left_arrow,(lax, lay))
+    screen.blit(Right_arrow,(rax, ray))
+    screen.blit(Space_button,(spx, spy))
 
 def images():
     screen.blit(sky1,(sx,sy))
@@ -138,6 +156,7 @@ while running:
             if gx <= -810:
                 gx = 800
                 print("picture ground1 has reach out of screen")
+                #print(txt_width, txt_height)
             else: 
                 if gx != 800:
                     g2x -= 10

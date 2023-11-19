@@ -50,8 +50,8 @@ font1 = pygame.font.SysFont("None", 60)
 font2 =pygame.font.SysFont("None", 40)
 text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
-txt_width = text2.get_width()
-txt_height = text2.get_height()
+#txt_width = text2.get_width()
+#txt_height = text2.get_height()
 
 
 #player and fly list of images to scroll thru
@@ -96,23 +96,23 @@ s2x = 800
 s2y = -80
 
 #sarting variables
-txw1 = 202
-txh1 = 120
-txw2 = 200
-txh2 = 350
-law = 560
-lah = 335
-raw = 630
-rah = 335
-spw = 710
-sph = 335
+txx1 = 202
+txy1 = 120
+txx2 = 200
+txy2 = 350
+lax = 560
+lay = 343
+rax = 615
+ray = 343
+spx = 670
+spy = 343
 
 def starting():
-    screen.blit(text1,(txw1, txh1))
-    screen.blit(text2,(txw2, txh2))
-    screen.blit(Left_arrow,(law, lah))
-    screen.blit(Right_arrow,(raw, rah))
-    screen.blit(Space_button,(spw, sph))
+    screen.blit(text1,(txx1, txy1))
+    screen.blit(text2,(txx2, txy2))
+    screen.blit(Left_arrow,(lax, lay))
+    screen.blit(Right_arrow,(rax, ray))
+    screen.blit(Space_button,(spx, spy))
 
 def images():
     screen.blit(sky1,(sx,sy))
