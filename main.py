@@ -48,8 +48,11 @@ Space_button = pygame.transform.scale(Space_button,(80, keys))
 #Start text
 font1 = pygame.font.SysFont("None", 60)
 font2 =pygame.font.SysFont("None", 40)
+font3 =pygame.font.SysFont("None", 30)
 text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
+text3 = font3.render('Press space to start', True, 'Black')
+
 #txt_width = text2.get_width()
 #txt_height = text2.get_height()
 
@@ -72,8 +75,8 @@ CUSTOM_EVEN = pygame.USEREVENT + 5
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
 pygame.time.set_timer(PLAYER_MOVEMENT, 300)
 pygame.time.set_timer(FLY_MOVEMENT, 500)
-pygame.time.set_timer(SKY_MOVEMENT, 40)
-pygame.time.set_timer(GROUND_MOVEMENT, 30)
+pygame.time.set_timer(SKY_MOVEMENT, 25)
+pygame.time.set_timer(GROUND_MOVEMENT, 20)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
 running = True
@@ -100,6 +103,8 @@ txx1 = 202
 txy1 = 120
 txx2 = 200
 txy2 = 350
+txx3 = 304
+txy3 = 210
 lax = 560
 lay = 343
 rax = 615
@@ -110,6 +115,7 @@ spy = 343
 def starting():
     screen.blit(text1,(txx1, txy1))
     screen.blit(text2,(txx2, txy2))
+    screen.blit(text3,(txx3, txy3))
     screen.blit(Left_arrow,(lax, lay))
     screen.blit(Right_arrow,(rax, ray))
     screen.blit(Space_button,(spx, spy))
@@ -140,26 +146,26 @@ while running:
             fly = pygame.image.load(list1[fl])
         
         if event.type == SKY_MOVEMENT:
-            sx-= 10
-            if sx <= -810:
+            sx-= 5
+            if sx <= -805:
                 sx = 800
                 print("picture sky1 has reach out of screen")
             else: 
                 if sx != 800:
-                    s2x -= 10
+                    s2x -= 5
                     if s2x == -800:
                         s2x = 800
                         print("picture sky2 has reach out of screen")
 
         if event.type == GROUND_MOVEMENT:
-            gx-= 10
-            if gx <= -810:
+            gx-= 5
+            if gx <= -805:
                 gx = 800
                 print("picture ground1 has reach out of screen")
                 #print(txt_width, txt_height)
             else: 
                 if gx != 800:
-                    g2x -= 10
+                    g2x -= 5
                     if g2x == -800:
                         g2x = 800
                         print("picture ground2 has reach out of screen")
@@ -196,6 +202,6 @@ while running:
             left = False
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(360)
 pygame.quit()
 sys.exit()

@@ -4,34 +4,6 @@ import sys
 space = False
 prespace = False
 
-def move_sky():
-    global sx
-    global s2x
-    sx-= 10
-    if sx <= -810:
-        sx = 800
-        print("picture sky1 has reach out of screen")
-    else: 
-        if sx != 800:
-            s2x -= 10
-            if s2x == -800:
-                s2x = 800
-                print("picture sky2 has reach out of screen")
-
-def move_ground():
-    global gx
-    global g2x
-    gx-= 10
-    if gx <= -810:
-        gx = 800
-        print("picture ground1 has reach out of screen")
-    else: 
-        if gx != 800:
-            g2x -= 10
-            if g2x == -800:
-                g2x = 800
-                print("picture ground2 has reach out of screen")
-
 def spaced():
     global space
     global prespace
@@ -45,7 +17,6 @@ def spaced():
             y -= 2
         sy += 30
         s2y += 30
-
 
 pygame.init()
 screen = pygame.display.set_mode((800,400))
@@ -81,8 +52,9 @@ font3 =pygame.font.SysFont("None", 30)
 text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
 text3 = font3.render('Press space to start', True, 'Black')
-txt_width = text3.get_width()
-txt_height = text3.get_height()
+
+#txt_width = text2.get_width()
+#txt_height = text2.get_height()
 
 
 #player and fly list of images to scroll thru
@@ -103,11 +75,10 @@ CUSTOM_EVEN = pygame.USEREVENT + 5
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
 pygame.time.set_timer(PLAYER_MOVEMENT, 300)
 pygame.time.set_timer(FLY_MOVEMENT, 500)
-pygame.time.set_timer(SKY_MOVEMENT, 40)
-pygame.time.set_timer(GROUND_MOVEMENT, 30)
+pygame.time.set_timer(SKY_MOVEMENT, 25)
+pygame.time.set_timer(GROUND_MOVEMENT, 20)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
-start = False
 running = True
 space = False
 prespace = False
@@ -141,6 +112,8 @@ ray = 343
 spx = 670
 spy = 343
 
+start = False
+
 def starting():
     screen.blit(text1,(txx1, txy1))
     screen.blit(text2,(txx2, txy2))
@@ -160,18 +133,20 @@ def images():
 while running:
     images()
     starting()
-    #print(txt_width, txt_height)
-    for event in pygame.event.get():
 
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-
-
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             start = True
+            print("started")
+        
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            start = False
+            print("user have pressed escape")
 
-        if start == True: 
+        if start == True:
             if event.type == PLAYER_MOVEMENT:
                 im = (im + 1) % len(list)
                 player = pygame.image.load(list[im])
@@ -181,10 +156,29 @@ while running:
                 fly = pygame.image.load(list1[fl])
             
             if event.type == SKY_MOVEMENT:
-                move_sky()
+                sx-= 5
+                if sx <= -805:
+                    sx = 800
+                    print("picture sky1 has reach out of screen")
+                else: 
+                    if sx != 800:
+                        s2x -= 5
+                        if s2x == -800:
+                            s2x = 800
+                            print("picture sky2 has reach out of screen")
 
             if event.type == GROUND_MOVEMENT:
-                move_ground()
+                gx-= 5
+                if gx <= -805:
+                    gx = 800
+                    print("picture ground1 has reach out of screen")
+                    #print(txt_width, txt_height)
+                else: 
+                    if gx != 800:
+                        g2x -= 5
+                        if g2x == -800:
+                            g2x = 800
+                            print("picture ground2 has reach out of screen")
                                 
 
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
@@ -218,6 +212,6 @@ while running:
                 left = False
 
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(360)
 pygame.quit()
 sys.exit()
