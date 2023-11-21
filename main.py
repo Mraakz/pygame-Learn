@@ -73,10 +73,10 @@ GROUND_MOVEMENT = pygame.USEREVENT + 4
 CUSTOM_EVEN = pygame.USEREVENT + 5
 
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
-pygame.time.set_timer(PLAYER_MOVEMENT, 300)
+pygame.time.set_timer(PLAYER_MOVEMENT, 400)
 pygame.time.set_timer(FLY_MOVEMENT, 500)
-pygame.time.set_timer(SKY_MOVEMENT, 25)
-pygame.time.set_timer(GROUND_MOVEMENT, 20)
+pygame.time.set_timer(SKY_MOVEMENT, 20)
+pygame.time.set_timer(GROUND_MOVEMENT, 15)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
 running = True
@@ -112,6 +112,8 @@ ray = 343
 spx = 670
 spy = 343
 
+start = False
+
 def starting():
     screen.blit(text1,(txx1, txy1))
     screen.blit(text2,(txx2, txy2))
@@ -136,70 +138,78 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-
-        if event.type == PLAYER_MOVEMENT:
-            im = (im + 1) % len(list)
-            player = pygame.image.load(list[im])
-
-        if event.type == FLY_MOVEMENT:
-            fl = (fl + 1) % len(list1)
-            fly = pygame.image.load(list1[fl])
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            start = True
+            print("started")
         
-        if event.type == SKY_MOVEMENT:
-            sx-= 5
-            if sx <= -805:
-                sx = 800
-                print("picture sky1 has reach out of screen")
-            else: 
-                if sx != 800:
-                    s2x -= 5
-                    if s2x == -800:
-                        s2x = 800
-                        print("picture sky2 has reach out of screen")
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+            start = False
+            print("user have pressed escape")
 
-        if event.type == GROUND_MOVEMENT:
-            gx-= 5
-            if gx <= -805:
-                gx = 800
-                print("picture ground1 has reach out of screen")
-                #print(txt_width, txt_height)
-            else: 
-                if gx != 800:
-                    g2x -= 5
-                    if g2x == -800:
-                        g2x = 800
-                        print("picture ground2 has reach out of screen")
-                          
+        if start == True:
+            if event.type == PLAYER_MOVEMENT:
+                im = (im + 1) % len(list)
+                player = pygame.image.load(list[im])
 
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            spaced()            
-            print("Spacebar pressed - Action 1")
+            if event.type == FLY_MOVEMENT:
+                fl = (fl + 1) % len(list1)
+                fly = pygame.image.load(list1[fl])
+            
+            if event.type == SKY_MOVEMENT:
+                sx-= 5
+                if sx <= -805:
+                    sx = 800
+                    print("picture sky1 has reach out of screen")
+                else: 
+                    if sx != 800:
+                        s2x -= 5
+                        if s2x == -800:
+                            s2x = 800
+                            print("picture sky2 has reach out of screen")
+
+            if event.type == GROUND_MOVEMENT:
+                gx-= 5
+                if gx <= -805:
+                    gx = 800
+                    print("picture ground1 has reach out of screen")
+                    #print(txt_width, txt_height)
+                else: 
+                    if gx != 800:
+                        g2x -= 5
+                        if g2x == -800:
+                            g2x = 800
+                            print("picture ground2 has reach out of screen")
+                                
+
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                spaced()            
+                print("Spacebar pressed - Action 1")
 
 
-        elif event.type == CUSTOM_EVEN and space:
-            while y != 220:
-                y += 2
-            sy -= 30
-            s2y -= 30 
-            print("Action 2")
-            space = False
-            prespace = space
-        
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            right = True
-            print("right button has been pressed")
-        
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            left = True
-            print("left button has been pressed")
+            elif event.type == CUSTOM_EVEN and space:
+                while y != 220:
+                    y += 2
+                sy -= 30
+                s2y -= 30 
+                print("Action 2")
+                space = False
+                prespace = space
+            
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+                right = True
+                print("right button has been pressed")
+            
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+                left = True
+                print("left button has been pressed")
 
-        while right:
-            x+=20
-            right = False
+            while right:
+                x+=20
+                right = False
 
-        while left:
-            x-=20
-            left = False
+            while left:
+                x-=20
+                left = False
 
     pygame.display.update()
     clock.tick(360)
