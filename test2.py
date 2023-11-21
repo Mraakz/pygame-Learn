@@ -43,13 +43,15 @@ Space_button = pygame.image.load('Buttons/space.png')
 Space_button = pygame.transform.scale(Space_button,(80, keys))
 
 #Start text
+score = 0
+distance = f'Distance: {score} m'
 font1 = pygame.font.SysFont("None", 60)
 font2 =pygame.font.SysFont("None", 40)
 font3 =pygame.font.SysFont("None", 30)
+font4 =pygame.font.SysFont("None", 30)
 text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
 text3 = font3.render('Press space to start', True, 'Black')
-
 #txt_width = text1.get_width()
 #txt_height = text1.get_height()
             
@@ -69,14 +71,17 @@ FLY_MOVEMENT2 = pygame.USEREVENT + 3
 SKY_MOVEMENT = pygame.USEREVENT + 4
 GROUND_MOVEMENT = pygame.USEREVENT + 5
 CUSTOM_EVEN = pygame.USEREVENT + 6
-
+DISTANCE_COUNTER = pygame.USEREVENT + 7
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
+speed = 400
+
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
 pygame.time.set_timer(FLY_MOVEMENT, 100)
 pygame.time.set_timer(FLY_MOVEMENT2, 15)
 pygame.time.set_timer(SKY_MOVEMENT, 20)
 pygame.time.set_timer(GROUND_MOVEMENT, 15)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
+pygame.time.set_timer(DISTANCE_COUNTER, speed)
 
 running = True
 
@@ -94,6 +99,7 @@ def starting():
     screen.blit(text1,(txx1, txy1))
     screen.blit(text2,(txx2, txy2))
     screen.blit(text3,(txx3, txy3))
+    screen.blit(text4,(0, 0))
     screen.blit(Left_arrow,(lax, lay))
     screen.blit(Right_arrow,(rax, ray))
     screen.blit(Space_button,(spx, spy))
@@ -115,8 +121,8 @@ sy = -80
 s2x = 800
 s2y = -80
 
-ran_fly_pos = 0
-fly_x = 350
+ran_fly_pos = 230
+fly_x = -60
 
 def random_fly_number():
     global ran_fly_pos
@@ -126,14 +132,18 @@ def random_fly_number():
     return ran_fly_pos
 
 def images():
-    global fly
+    global fly, distance, text4, score
     fly = pygame.transform.scale(fly,(60, 30))
+    distance = f'Distance: {score} m'
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
     screen.blit(ground2,(g2x,g2y))
     screen.blit(fly,(fly_x, ran_fly_pos))
     screen.blit(player,(x , y))
+    text4 = font4.render(distance, True, 'Black')
+    if score == 10:
+        speed = 100
 
 def text_out():
     global txt_width, txt_height
@@ -150,6 +160,19 @@ def text_in():
     txy2, txy3 = 350, 210
     lay, ray, spy = 343, 343, 343
 
+def sky_move():
+    global sx, s2x
+    sx-= 5
+    if sx <= -805:
+        sx = 800
+        print("picture sky1 has reach out of screen")
+    else: 
+        if sx != 800:
+            s2x -= 5
+            if s2x == -800:
+                s2x = 800
+                print("picture sky2 has reach out of screen")
+
 def fly_move():
     global fly_x
     if fly_x >= -84:
@@ -158,8 +181,27 @@ def fly_move():
             random_fly_number()
             fly_x = 884
 
+def ground_move():
+    global gx, g2x
+    gx-= 5
+    if gx <= -805:
+        gx = 800
+        print("picture ground1 has reach out of screen")
+        #print(txt_width, txt_height)
+    else: 
+        if gx != 800:
+            g2x -= 5
+            if g2x == -800:
+                g2x = 800
+                print("picture ground2 has reach out of screen")
+
+def d_c():
+    global score
+    score +=1
+
 
 while running:
+    
     images()
     starting()
     
@@ -192,39 +234,21 @@ while running:
                 fly_move()
 
             if event.type == SKY_MOVEMENT:
-                sx-= 5
-                if sx <= -805:
-                    sx = 800
-                    print("picture sky1 has reach out of screen")
-                else: 
-                    if sx != 800:
-                        s2x -= 5
-                        if s2x == -800:
-                            s2x = 800
-                            print("picture sky2 has reach out of screen")
-                        
-            
+                sky_move()         
 
             if event.type == GROUND_MOVEMENT:
-                gx-= 5
-                if gx <= -805:
-                    gx = 800
-                    print("picture ground1 has reach out of screen")
-                    #print(txt_width, txt_height)
-                else: 
-                    if gx != 800:
-                        g2x -= 5
-                        if g2x == -800:
-                            g2x = 800
-                            print("picture ground2 has reach out of screen")
-                                
+                ground_move()                               
+            
+            if event.type == DISTANCE_COUNTER:
+                d_c()
 
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 spaced()            
                 print("Spacebar pressed - Action 1")
 
 
-            elif event.type == CUSTOM_EVEN and space:
+            if event.type == CUSTOM_EVEN and space:
                 while y != 220:
                     y += 2
                 sy -= 30
@@ -233,7 +257,7 @@ while running:
                 space = False
                 prespace = space
             
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 right = True
                 print("right button has been pressed")
             

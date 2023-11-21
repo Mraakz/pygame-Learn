@@ -50,8 +50,8 @@ text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
 text3 = font3.render('Press space to start', True, 'Black')
 
-txt_width = text1.get_width()
-txt_height = text1.get_height()
+#txt_width = text1.get_width()
+#txt_height = text1.get_height()
             
 
 #player and fly list of images to scroll thru
@@ -65,13 +65,15 @@ fly = pygame.image.load(list1[fl])
 
 PLAYER_MOVEMENT = pygame.USEREVENT + 1
 FLY_MOVEMENT = pygame.USEREVENT + 2
-SKY_MOVEMENT = pygame.USEREVENT + 3
-GROUND_MOVEMENT = pygame.USEREVENT + 4
-CUSTOM_EVEN = pygame.USEREVENT + 5
+FLY_MOVEMENT2 = pygame.USEREVENT + 3
+SKY_MOVEMENT = pygame.USEREVENT + 4
+GROUND_MOVEMENT = pygame.USEREVENT + 5
+CUSTOM_EVEN = pygame.USEREVENT + 6
 
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
 pygame.time.set_timer(FLY_MOVEMENT, 100)
+pygame.time.set_timer(FLY_MOVEMENT2, 15)
 pygame.time.set_timer(SKY_MOVEMENT, 20)
 pygame.time.set_timer(GROUND_MOVEMENT, 15)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
@@ -135,8 +137,8 @@ def text_out():
     global txt_width, txt_height
     global txy1, txy2, txy3, lay, ray, spy, text1
     text1 = font1.render("Game Paused", True, "BLACK")
-    txt_width = text1.get_width()
-    txt_height = text1.get_height()
+    txt_width = fly.get_width()
+    txt_height = fly.get_height()
     txy1, txy2, txy3 = -41, 429, 420
     lay, ray, spy = 440, 440, 440
 
@@ -146,6 +148,13 @@ def text_in():
     txy2, txy3 = 350, 210
     lay, ray, spy = 343, 343, 343
 
+def fly_move():
+    global fly_x
+    if fly_x >= -84:
+        fly_x-= 4
+        if fly_x <= -84:
+            random_fly_number()
+            fly_x = 884
 
 
 while running:
@@ -177,18 +186,22 @@ while running:
                 fl = (fl + 1) % len(list1)
                 fly = pygame.image.load(list1[fl])
 
+            if event.type == FLY_MOVEMENT2:
+                fly_move()
+
             if event.type == SKY_MOVEMENT:
                 sx-= 5
                 if sx <= -805:
                     sx = 800
                     print("picture sky1 has reach out of screen")
-                    random_fly_number()
                 else: 
                     if sx != 800:
                         s2x -= 5
                         if s2x == -800:
                             s2x = 800
                             print("picture sky2 has reach out of screen")
+                        
+            
 
             if event.type == GROUND_MOVEMENT:
                 gx-= 5
