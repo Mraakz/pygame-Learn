@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 space = False
 prespace = False
@@ -49,8 +50,8 @@ text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
 text3 = font3.render('Press space to start', True, 'Black')
 
-txt_width = text1.get_width()
-txt_height = text1.get_height()
+#txt_width = text1.get_width()
+#txt_height = text1.get_height()
             
 
 #player and fly list of images to scroll thru
@@ -64,49 +65,28 @@ fly = pygame.image.load(list1[fl])
 
 PLAYER_MOVEMENT = pygame.USEREVENT + 1
 FLY_MOVEMENT = pygame.USEREVENT + 2
-SKY_MOVEMENT = pygame.USEREVENT + 3
-GROUND_MOVEMENT = pygame.USEREVENT + 4
-CUSTOM_EVEN = pygame.USEREVENT + 5
+FLY_MOVEMENT2 = pygame.USEREVENT + 3
+SKY_MOVEMENT = pygame.USEREVENT + 4
+GROUND_MOVEMENT = pygame.USEREVENT + 5
+CUSTOM_EVEN = pygame.USEREVENT + 6
 
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
-pygame.time.set_timer(FLY_MOVEMENT, 500)
+pygame.time.set_timer(FLY_MOVEMENT, 100)
+pygame.time.set_timer(FLY_MOVEMENT2, 15)
 pygame.time.set_timer(SKY_MOVEMENT, 20)
 pygame.time.set_timer(GROUND_MOVEMENT, 15)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
 running = True
-space = False
-prespace = False
-right = False
-left = False
-x = 30
-y = 220
-j=0
-
-back = True 
-gx = 0
-gy = 298
-g2x = 800
-g2y = 298
-sx = 0
-sy = -80
-s2x = 800
-s2y = -80
 
 #sarting variables
-txx1 = 202
-txy1 = 120
-txx2 = 200
-txy2 = 350
-txx3 = 304
-txy3 = 210
-lax = 560
-lay = 343
-rax = 615
-ray = 343
-spx = 670
-spy = 343
+txx1, txy1 = 202, 120
+txx2, txy2 = 200, 350
+txx3, txy3 = 304, 210
+lax, lay= 560, 343
+rax, ray = 615, 343
+spx, spy = 670, 343
 
 start = False
 
@@ -118,20 +98,49 @@ def starting():
     screen.blit(Right_arrow,(rax, ray))
     screen.blit(Space_button,(spx, spy))
 
+space = False
+prespace = False
+right = False
+left = False
+x, y = 30, 220
+
+
+back = True 
+gx = 0
+gy = 298
+g2x = 800
+g2y = 298
+sx = 0
+sy = -80
+s2x = 800
+s2y = -80
+
+ran_fly_pos = 0
+fly_x = 350
+
+def random_fly_number():
+    global ran_fly_pos
+    ran_fly_pos
+    ran_fly_pos = 0
+    ran_fly_pos = random.randint(50,258)
+    return ran_fly_pos
+
 def images():
+    global fly
+    fly = pygame.transform.scale(fly,(60, 30))
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
     screen.blit(ground2,(g2x,g2y))
-    screen.blit(fly,(350,50))
+    screen.blit(fly,(fly_x, ran_fly_pos))
     screen.blit(player,(x , y))
 
 def text_out():
     global txt_width, txt_height
     global txy1, txy2, txy3, lay, ray, spy, text1
     text1 = font1.render("Game Paused", True, "BLACK")
-    txt_width = text1.get_width()
-    txt_height = text1.get_height()
+    txt_width = fly.get_width()
+    txt_height = fly.get_height()
     txy1, txy2, txy3 = -41, 429, 420
     lay, ray, spy = 440, 440, 440
 
@@ -140,6 +149,14 @@ def text_in():
     txx1, txy1 = 261, 130
     txy2, txy3 = 350, 210
     lay, ray, spy = 343, 343, 343
+
+def fly_move():
+    global fly_x
+    if fly_x >= -84:
+        fly_x-= 4
+        if fly_x <= -84:
+            random_fly_number()
+            fly_x = 884
 
 
 while running:
@@ -171,6 +188,9 @@ while running:
                 fl = (fl + 1) % len(list1)
                 fly = pygame.image.load(list1[fl])
 
+            if event.type == FLY_MOVEMENT2:
+                fly_move()
+
             if event.type == SKY_MOVEMENT:
                 sx-= 5
                 if sx <= -805:
@@ -182,6 +202,8 @@ while running:
                         if s2x == -800:
                             s2x = 800
                             print("picture sky2 has reach out of screen")
+                        
+            
 
             if event.type == GROUND_MOVEMENT:
                 gx-= 5

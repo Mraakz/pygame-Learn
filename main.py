@@ -1,15 +1,12 @@
 import pygame
 import sys
+import random
 
 space = False
 prespace = False
 
 def spaced():
-    global space
-    global prespace
-    global y
-    global sy
-    global s2y
+    global space, prespace, y, sy, s2y
     if not prespace:
         prespace = True
         space = True
@@ -53,9 +50,9 @@ text1 = font1.render('Welcome To Runner', True, 'Black')
 text2 = font2.render('controls for this game are:', True, 'Black')
 text3 = font3.render('Press space to start', True, 'Black')
 
-#txt_width = text2.get_width()
-#txt_height = text2.get_height()
-
+txt_width = text1.get_width()
+txt_height = text1.get_height()
+            
 
 #player and fly list of images to scroll thru
 list = ['graphics/player1.png', 'graphics/player2.png', 'graphics/player3.png']
@@ -74,43 +71,20 @@ CUSTOM_EVEN = pygame.USEREVENT + 5
 
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
-pygame.time.set_timer(FLY_MOVEMENT, 500)
+pygame.time.set_timer(FLY_MOVEMENT, 100)
 pygame.time.set_timer(SKY_MOVEMENT, 20)
 pygame.time.set_timer(GROUND_MOVEMENT, 15)
 pygame.time.set_timer(CUSTOM_EVEN, 1000)
 
 running = True
-space = False
-prespace = False
-right = False
-left = False
-x = 30
-y = 220
-j=0
-
-back = True 
-gx = 0
-gy = 298
-g2x = 800
-g2y = 298
-sx = 0
-sy = -80
-s2x = 800
-s2y = -80
 
 #sarting variables
-txx1 = 202
-txy1 = 120
-txx2 = 200
-txy2 = 350
-txx3 = 304
-txy3 = 210
-lax = 560
-lay = 343
-rax = 615
-ray = 343
-spx = 670
-spy = 343
+txx1, txy1 = 202, 120
+txx2, txy2 = 200, 350
+txx3, txy3 = 304, 210
+lax, lay= 560, 343
+rax, ray = 615, 343
+spx, spy = 670, 343
 
 start = False
 
@@ -122,29 +96,77 @@ def starting():
     screen.blit(Right_arrow,(rax, ray))
     screen.blit(Space_button,(spx, spy))
 
+space = False
+prespace = False
+right = False
+left = False
+x, y = 30, 220
+
+
+back = True 
+gx = 0
+gy = 298
+g2x = 800
+g2y = 298
+sx = 0
+sy = -80
+s2x = 800
+s2y = -80
+
+ran_fly_pos = 0
+fly_x = 350
+
+def random_fly_number():
+    global ran_fly_pos
+    ran_fly_pos
+    ran_fly_pos = 0
+    ran_fly_pos = random.randint(50,258)
+    return ran_fly_pos
+
 def images():
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
     screen.blit(ground2,(g2x,g2y))
-    screen.blit(fly,(350,50))
+    screen.blit(fly,(fly_x, ran_fly_pos))
     screen.blit(player,(x , y))
+
+def text_out():
+    global txt_width, txt_height
+    global txy1, txy2, txy3, lay, ray, spy, text1
+    text1 = font1.render("Game Paused", True, "BLACK")
+    txt_width = text1.get_width()
+    txt_height = text1.get_height()
+    txy1, txy2, txy3 = -41, 429, 420
+    lay, ray, spy = 440, 440, 440
+
+def text_in():
+    global txy1, txx1, txy2, txy3, lay, ray, spy
+    txx1, txy1 = 261, 130
+    txy2, txy3 = 350, 210
+    lay, ray, spy = 343, 343, 343
+
+
 
 while running:
     images()
     starting()
-
+    
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             start = True
+            text_out()
             print("started")
         
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             start = False
+            text_in()
             print("user have pressed escape")
+            print(txt_width,txt_height)
 
         if start == True:
             if event.type == PLAYER_MOVEMENT:
@@ -154,12 +176,13 @@ while running:
             if event.type == FLY_MOVEMENT:
                 fl = (fl + 1) % len(list1)
                 fly = pygame.image.load(list1[fl])
-            
+
             if event.type == SKY_MOVEMENT:
                 sx-= 5
                 if sx <= -805:
                     sx = 800
                     print("picture sky1 has reach out of screen")
+                    random_fly_number()
                 else: 
                     if sx != 800:
                         s2x -= 5
