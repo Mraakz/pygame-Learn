@@ -2,19 +2,6 @@ import pygame
 import sys
 import random
 
-space = False
-prespace = False
-
-def spaced():
-    global space, prespace, y, sy, s2y
-    if not prespace:
-        prespace = True
-        space = True
-        while y >= 120:
-            y -= 2
-        sy += 30
-        s2y += 30
-
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('runner')
@@ -77,10 +64,10 @@ speed = 400
 
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
 pygame.time.set_timer(FLY_MOVEMENT, 100)
-pygame.time.set_timer(FLY_MOVEMENT2, 15)
+pygame.time.set_timer(FLY_MOVEMENT2, 10)
 pygame.time.set_timer(SKY_MOVEMENT, 20)
 pygame.time.set_timer(GROUND_MOVEMENT, 15)
-pygame.time.set_timer(CUSTOM_EVEN, 1000)
+pygame.time.set_timer(CUSTOM_EVEN, 4)
 pygame.time.set_timer(DISTANCE_COUNTER, speed)
 
 running = True
@@ -92,6 +79,7 @@ txx3, txy3 = 304, 210
 lax, lay= 560, 343
 rax, ray = 615, 343
 spx, spy = 670, 343
+
 
 start = False
 
@@ -105,11 +93,12 @@ def starting():
     screen.blit(Space_button,(spx, spy))
 
 space = False
-prespace = False
+space1 = False
+space2 = False
+
 right = False
 left = False
 x, y = 30, 220
-
 
 back = True 
 gx = 0
@@ -124,16 +113,30 @@ s2y = -80
 ran_fly_pos = 230
 fly_x = -60
 
+def spaced():
+    global space, space1, space2, y, sy, s2y
+    y-= 2
+    if y == 60:
+        space1 = False
+        space2 = True
+
+def despace():
+    global space, space2, y, sy, s2y
+    y+= 2
+    if y == 220:
+        space2 = False
+        space = False
+
 def random_fly_number():
     global ran_fly_pos
     ran_fly_pos
     ran_fly_pos = 0
-    ran_fly_pos = random.randint(50,258)
+    ran_fly_pos = random.randint(190,258)
     return ran_fly_pos
 
 def images():
     global fly, distance, text4, score
-    fly = pygame.transform.scale(fly,(60, 30))
+    fly = pygame.transform.scale(fly,(40, 20))
     distance = f'Distance: {score} m'
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
@@ -142,8 +145,6 @@ def images():
     screen.blit(fly,(fly_x, ran_fly_pos))
     screen.blit(player,(x , y))
     text4 = font4.render(distance, True, 'Black')
-    if score == 10:
-        speed = 100
 
 def text_out():
     global txt_width, txt_height
@@ -210,7 +211,7 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and start == False:
             start = True
             text_out()
             print("started")
@@ -219,7 +220,7 @@ while running:
             start = False
             text_in()
             print("user have pressed escape")
-            print(txt_width,txt_height)
+            #print(txt_width,txt_height)
 
         if start == True:
             if event.type == PLAYER_MOVEMENT:
@@ -242,20 +243,15 @@ while running:
             if event.type == DISTANCE_COUNTER:
                 d_c()
 
+            if event.type == CUSTOM_EVEN and space == True: 
+                space1 = True
+                if y != 60 and space1 and not space2:
+                    spaced()
+                if y != 220 and space2:
+                    despace()
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                spaced()            
-                print("Spacebar pressed - Action 1")
-
-
-            if event.type == CUSTOM_EVEN and space:
-                while y != 220:
-                    y += 2
-                sy -= 30
-                s2y -= 30 
-                print("Action 2")
-                space = False
-                prespace = space
+                space = True
             
             if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 right = True
@@ -272,6 +268,13 @@ while running:
             while left:
                 x-=20
                 left = False
+            
+            fly_width = 8
+            fly_height = 8
+            fly_rect = pygame.Rect(fly_x, ran_fly_pos, fly_width, fly_height)
+            player_rect = player.get_rect(topleft = (x , y))
+            if player_rect.colliderect(fly_rect):
+                print("user colided with fly")
 
     pygame.display.update()
     clock.tick(360)
