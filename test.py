@@ -2,7 +2,6 @@ import pygame
 import sys
 import random
 
-
 pygame.init()
 screen = pygame.display.set_mode((800,400))
 pygame.display.set_caption('runner')
@@ -61,7 +60,7 @@ GROUND_MOVEMENT = pygame.USEREVENT + 5
 CUSTOM_EVEN = pygame.USEREVENT + 6
 DISTANCE_COUNTER = pygame.USEREVENT + 7
 # Create a timer to trigger the custom event after a delay (1000 milliseconds)
-speed = 400
+speed = 200
 
 pygame.time.set_timer(PLAYER_MOVEMENT, 400)
 pygame.time.set_timer(FLY_MOVEMENT, 100)
@@ -136,9 +135,10 @@ def random_fly_number():
     return ran_fly_pos
 
 def images():
-    global fly, distance, text4, score
+    global fly, distance, text4, score, high_score, h_score
     fly = pygame.transform.scale(fly,(40, 20))
     distance = f'Distance: {score} m'
+    h_score = f'Highscore: {high_score} m'
     screen.blit(sky1,(sx,sy))
     screen.blit(sky2,(s2x,s2y))
     screen.blit(ground1,(gx,gy))
@@ -146,6 +146,8 @@ def images():
     screen.blit(fly,(fly_x, ran_fly_pos))
     screen.blit(player,(x , y))
     text4 = font4.render(distance, True, 'Black')
+    text5 = font4.render(h_score, True, "BLACK")
+    screen.blit(text5,(250, 0))
 
 def text_out():
     global txt_width, txt_height
@@ -201,6 +203,24 @@ def d_c():
     global score
     score +=1
 
+def game_over():
+    global gameover, high_score, text1, score
+    global txx1, txy1, txx2, txy2, txx3, txy3, lax, lay, rax, ray, spx, spy, fly_x, x, y
+    global txt_height, txt_width
+    if gameover:
+        text1 = font1.render("Game Over", True, "BLACK")
+        txx1, txy1 = 287, 120
+        txx2, txy2 = 200, 350
+        txx3, txy3 = 304, 210
+        lax, lay= 560, 343
+        rax, ray = 615, 343
+        spx, spy = 670, 343
+        fly_x = -60
+        score = 0
+        gameover = False
+
+high_score = 0
+gameover = False
 
 while running:
     
@@ -212,7 +232,7 @@ while running:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and start == False:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE and start == False and not gameover:
             start = True
             text_out()
             print("started")
@@ -250,6 +270,7 @@ while running:
                     spaced()
                 if y != 220 and space2:
                     despace()
+                    
 
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 space = True
@@ -269,13 +290,27 @@ while running:
             while left:
                 x-=20
                 left = False
-            
+
+            gameover = False
             fly_width = 8
             fly_height = 8
             fly_rect = pygame.Rect(fly_x, ran_fly_pos, fly_width, fly_height)
             player_rect = player.get_rect(topleft = (x , y))
             if player_rect.colliderect(fly_rect):
-                print("user colided with fly")
+                pass
+                if not gameover:
+                    print("user has colided")
+                    gameover = True
+                    start = False
+                    if score > high_score:
+                        high_score = score
+                    x, y = 30, 220
+                    space = False
+                    space1 = False
+                    space2 = False
+                    game_over()
+
+
 
     pygame.display.update()
     clock.tick(360)

@@ -17,7 +17,7 @@ class Screen_size():
 
 screen_width=800
 screen_height=400
-text_width=279
+text_width=227
 text_height=41
 
 awnser=Screen_size(screen_width, text_width, screen_height, text_height)
